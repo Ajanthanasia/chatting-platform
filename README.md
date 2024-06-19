@@ -1,2 +1,3 @@
 # chatting-platform
-MERN Stack
+MERN Stack 
+socker.io
