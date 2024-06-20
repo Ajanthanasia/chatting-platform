@@ -6,15 +6,15 @@ function Login() {
     const [password, setPassword] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [url, setUrl] = useState('#');
+    const url = useState('#');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setUsernameError('');
         setPasswordError('');
-        if (username == '') {
+        if (username === '') {
             setUsernameError('Username is required');
-        } else if (password == '') {
+        } else if (password === '') {
             setPasswordError('Password is required');
         } else {
             console.log(username);
@@ -24,6 +24,7 @@ function Login() {
                     username,
                     password,
                 });
+                console.log(response);
                 console.log('Login successfully');
             } catch (error) {
                 console.log(error);
