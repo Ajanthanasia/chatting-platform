@@ -1,31 +1,39 @@
 import React, { useState } from "react";
 import axios from 'axios';
 
-function Login() {
+function Signup() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [emailError, setEmailError] = useState("");
     const url = useState('#');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setUsernameError('');
+        setEmailError('');
         setPasswordError('');
         if (username === '') {
             setUsernameError('Username is required');
-        } else if (password === '') {
+        } else if (email === '') {
+            setEmailError('Email is required');
+        }
+        else if (password === '') {
             setPasswordError('Password is required');
         } else {
             console.log(username);
+            console.log(email);
             console.log(password);
             try {
                 const response = await axios.post(url, {
                     username,
+                    email,
                     password,
                 });
                 console.log(response);
-                console.log('Login successfully');
+                console.log('Register successfully');
             } catch (error) {
                 console.log(error);
             }
@@ -35,7 +43,7 @@ function Login() {
         <div className="panel">
             <div className="row">
                 <div className="col-md-12">
-                    <span>Welcome to Chatting app</span>
+                    Register your Account
                 </div>
             </div>
             <form onSubmit={handleSubmit}>
@@ -63,6 +71,26 @@ function Login() {
                     <div className="row">
                         <div className="col-md-8">
                             <strong>
+                                <label htmlFor="email">Email</label>
+                            </strong>
+                        </div>
+                        <div className="col-md-8">
+                            <input
+                                type="text"
+                                id="email"
+                                className="form-control"
+                                placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <b>{emailError}</b>
+                        </div>
+                    </div>
+                </div>
+                <div className="form-group">
+                    <div className="row">
+                        <div className="col-md-8">
+                            <strong>
                                 <label htmlFor="password">Password :</label>
                             </strong>
                         </div>
@@ -82,21 +110,13 @@ function Login() {
                 <div className="form-group">
                     <div className="row">
                         <div className="col-md-8">
-                            <button type="submit" className="btn btn-primary form-control">Sign In</button>
+                            <button type="submit" className="btn btn-primary form-control">Sign Up</button>
                         </div>
                     </div>
                 </div>
             </form>
-            <hr />
-            <div className="row">
-                <div className="col-md-6">
-                    <a href="signup">
-                        <button className="btn btn-info">Sign Up</button>
-                    </a>
-                </div>
-            </div>
         </div>
     );
 }
 
-export default Login;
+export default Signup;
