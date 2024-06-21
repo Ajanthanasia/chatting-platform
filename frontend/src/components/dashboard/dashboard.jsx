@@ -9,9 +9,11 @@ function Dashboard() {
                 </button>
             </div>
             <div className="mb-1">
-                <button className="btn btn-sm btn-success">
-                    Channel
-                </button>
+                <a href="channel-list">
+                    <button className="btn btn-sm btn-success">
+                        Channel
+                    </button>
+                </a>
             </div>
             <div className="mb-1">
                 <button className="btn btn-sm btn-success">

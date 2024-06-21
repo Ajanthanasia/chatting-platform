@@ -4,6 +4,7 @@ import Login from "../login/login";
 import Signup from "../signup/signup";
 import Dashboard from "../dashboard/dashboard";
 import Profile from "../dashboard/profile";
+import ChannelListDashboard from "../dashboard/channel";
 
 function Routing() {
     return (
@@ -13,6 +14,7 @@ function Routing() {
                 <Route path="signup" element={<Signup />}></Route>
                 <Route path="dashboard" element={<Dashboard />}></Route>
                 <Route path="profile" element={<Profile />}></Route>
+                <Route path="channel-list" element={<ChannelListDashboard />}></Route>
             </Routes>
         </BrowserRouter>
     );

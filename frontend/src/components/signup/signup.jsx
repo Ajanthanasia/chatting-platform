@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
     const [username, setUsername] = useState("");
@@ -9,6 +10,8 @@ function Signup() {
     const [passwordError, setPasswordError] = useState("");
     const [emailError, setEmailError] = useState("");
     const url = 'http://localhost:4242/api/members/register';
+    const navigate = useNavigate();
+    const loginPageUrl = '/';
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -23,9 +26,6 @@ function Signup() {
         else if (password === '') {
             setPasswordError('Password is required');
         } else {
-            console.log(username);
-            console.log(email);
-            console.log(password);
             try {
                 const response = await axios.post(`${url}`, {
                     username: username,
@@ -34,6 +34,7 @@ function Signup() {
                 });
                 console.log(response);
                 console.log('Register successfully');
+                navigate(loginPageUrl);
             } catch (error) {
                 console.log(error);
             }
