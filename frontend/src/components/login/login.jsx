@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -7,6 +8,8 @@ function Login() {
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const url = 'http://localhost:4242/api/members/login';
+    const navigate = useNavigate();
+    const successUrl = '/dashboard';
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -17,8 +20,6 @@ function Login() {
         } else if (password === '') {
             setPasswordError('Password is required');
         } else {
-            console.log(username);
-            console.log(password);
             try {
                 const response = await axios.post(`${url}`, {
                     username: username,
@@ -26,6 +27,7 @@ function Login() {
                 });
                 console.log(response);
                 console.log('Login successfully!');
+                navigate(successUrl);
             } catch (error) {
                 console.log(error);
             }

@@ -15,9 +15,9 @@ const port = config.get('port');
 const hostname = config.get('hostname');
 
 app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true  
-  }));
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,14 +34,14 @@ const users = {};
 io.on('connection', (socket) => {
   console.log('New client connected');
   socket.on('userDetails', async (data) => {
-    const {username, email, password } = data;
-    const hashedPassword = await bcrypt.hash(password, 10); 
-    users[socket.id] = {username, email, password: hashedPassword }; 
+    const { username, email, password } = data;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    users[socket.id] = { username, email, password: hashedPassword };
     console.log('User saved:', users[socket.id]);
   });
 
   socket.on('disconnect', () => {
     console.log('Client disconnected');
-    delete users[socket.id]; 
+    delete users[socket.id];
   });
 });
