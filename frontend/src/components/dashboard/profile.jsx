@@ -14,6 +14,9 @@ function Profile() {
                             <span>Hi, username</span>
                         </div>
                     </div>
+                    <div className="row">
+                        
+                    </div>
                 </div>
             </div>
         </div>
