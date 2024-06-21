@@ -6,7 +6,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const url = useState('http://localhost:4242/api/members/login');
+    const url = 'http://localhost:4242/api/members/login';
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -20,12 +20,12 @@ function Login() {
             console.log(username);
             console.log(password);
             try {
-                const response = await axios.post(url, {
-                    username,
-                    password,
+                const response = await axios.post(`${url}`, {
+                    username: username,
+                    password: password,
                 });
                 console.log(response);
-                console.log('Login successfully');
+                console.log('Login successfully!');
             } catch (error) {
                 console.log(error);
             }

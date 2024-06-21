@@ -8,7 +8,7 @@ function Signup() {
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [emailError, setEmailError] = useState("");
-    const url = useState('http://localhost:4242/api/members/register/');
+    const url = 'http://localhost:4242/api/members/register';
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -27,10 +27,10 @@ function Signup() {
             console.log(email);
             console.log(password);
             try {
-                const response = await axios.post(url, {
-                    username,
-                    email,
-                    password,
+                const response = await axios.post(`${url}`, {
+                    username: username,
+                    email: email,
+                    password: password,
                 });
                 console.log(response);
                 console.log('Register successfully');
