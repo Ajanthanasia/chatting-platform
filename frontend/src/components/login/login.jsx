@@ -9,7 +9,7 @@ function Login() {
     const [passwordError, setPasswordError] = useState("");
     const url = 'http://localhost:4242/api/members/login';
     const navigate = useNavigate();
-    const successUrl = '/dashboard';
+    const successUrl = '/profile';
 
     const handleSubmit = async (event) => {
         event.preventDefault();
