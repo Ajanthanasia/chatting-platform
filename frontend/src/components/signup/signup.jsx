@@ -8,7 +8,7 @@ function Signup() {
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [emailError, setEmailError] = useState("");
-    const url = useState('#');
+    const url = useState('http://localhost:4242/api/members/register/');
 
     const handleSubmit = async (event) => {
         event.preventDefault();

@@ -6,7 +6,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const url = useState('#');
+    const url = useState('http://localhost:4242/api/members/login');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
