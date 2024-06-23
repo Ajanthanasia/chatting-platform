@@ -25,8 +25,8 @@ function Profile() {
                 userId: userId,
                 newUsername: requsername,
             });
-            console.log(response);
-            console.log(response.data.username);
+            // console.log(response);
+            // console.log(response.data.username);
             console.log('Successfully updated');
             const data = { id: response.data.userId, name: response.data.username };
             navigate(successUrl, { state: data });

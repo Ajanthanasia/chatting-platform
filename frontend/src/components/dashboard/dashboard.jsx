@@ -22,7 +22,7 @@ function Dashboard(props) {
             <div className="mb-1">
                 <a href="channels-index">
                     <button className="btn btn-sm btn-success"
-                    onClick={() => { navigate('/channels-index', { state: { id: id, name: name } }) }}>
+                        onClick={() => { navigate('/channels-index', { state: { id: id, name: name } }) }}>
                         Channels
                     </button>
                 </a>
