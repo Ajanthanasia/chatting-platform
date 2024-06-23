@@ -4,7 +4,9 @@ import Routing from './components/routes/route';
 function App() {
   return (
     <div className="container">
-      <Routing></Routing>
+      <div className="mt-1">
+        <Routing></Routing>
+      </div>
     </div>
   );
 }

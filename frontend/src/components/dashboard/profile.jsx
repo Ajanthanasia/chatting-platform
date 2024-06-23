@@ -27,7 +27,6 @@ function Profile() {
             });
             console.log(response);
             console.log(response.data.username);
-            // setUsername(response.data.username);
             console.log('Successfully updated');
             const data = { id: response.data.userId, name: response.data.username };
             navigate(successUrl, { state: data });
@@ -39,7 +38,7 @@ function Profile() {
         <div className="panel mt-1">
             <div className="row">
                 <div className="col-sm-3">
-                    <Dashboard />
+                    <Dashboard id={userId} name={username} />
                 </div>
                 <div className="col-sm-9">
                     <div className="row">
