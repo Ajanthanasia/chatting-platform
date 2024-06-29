@@ -28,7 +28,8 @@ function Dashboard(props) {
                 </a>
             </div>
             <div className="mb-1">
-                <button className="btn btn-sm btn-success">
+                <button className="btn btn-sm btn-success"
+                    onClick={() => { navigate('/chats-index', { state: { id: id, name: name } }) }}>
                     Chats
                 </button>
             </div>

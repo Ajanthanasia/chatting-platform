@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function ChannelIndex() {
     const navigate = useNavigate();
-    const [channels, setChannels] = useState([{ id: 1, channels: 'cha' }]);
+    const [channels, setChannels] = useState([{ id: 1, channels: 'loading...' }]);
     const loadUrl = 'http://localhost:4242/api/members/listChannels';
     const location = useLocation();
     const { id, name } = location.state || {};
@@ -14,6 +14,7 @@ function ChannelIndex() {
         try {
             const response = await axios.get(`${loadUrl}`, {});
             setChannels(response.data);
+            console.log(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -45,7 +46,13 @@ function ChannelIndex() {
                                 <div className="form-control">
                                     <div className="row">
                                         <div className="col-md-6">
+                                            <label htmlFor="">Channel : </label>
                                             <span>{channel.channels}</span>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <button className="btn btn-primary">Edit</button>
                                         </div>
                                     </div>
                                 </div>
