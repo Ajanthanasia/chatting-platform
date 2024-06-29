@@ -1,10 +1,9 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard(props) {
     const { id, name } = props;
     const navigate = useNavigate();
-    console.log(props);
     return (
         <>
             <div className="mb-1">

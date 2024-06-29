@@ -18,8 +18,8 @@ function CreateChannel() {
                 userId: id,
                 channelName: channel,
             });
-            console.log(response);
-            console.log(response.data);
+            // console.log(response);
+            // console.log(response.data);
             console.log('Successfully updated');
             const data = { id: id, name: name };
             navigate(successUrl, { state: data });
