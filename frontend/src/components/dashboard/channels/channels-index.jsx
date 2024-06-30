@@ -130,6 +130,12 @@ function ChannelIndex() {
                                                     Leave
                                                 </button>
                                             </div>
+                                            <div className="col-md-3">
+                                                <button className="btn btn-warning"
+                                                    onClick={() => { navigate('/channels-chat', { state: { id: id, name: name, channelName: channel.channels, channelId: channel.id } }) }}>
+                                                    msg
+                                                </button>
+                                            </div>
                                         </div>
                                     }
                                 </div>

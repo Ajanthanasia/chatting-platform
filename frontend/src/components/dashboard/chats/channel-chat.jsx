@@ -75,8 +75,14 @@ function ChannelChat() {
                                         </div>
                                         :
                                         <div className="col-md-6">
-                                            <div className="form-control">{chat.msg}</div>
-                                            <b>By {chat.username}</b>
+                                            <div className="form-control">
+                                                <div className="row">
+                                                    <div className="col-md-12">
+                                                        {chat.msg}
+                                                    </div>
+                                                </div>
+                                                <b>By {chat.username}</b>
+                                            </div>
                                         </div>
                                     }
                                 </div>
