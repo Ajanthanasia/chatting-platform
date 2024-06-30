@@ -14,7 +14,6 @@ function DashboardUserList() {
         try {
             const response = await axios.get(`${loadUrl}`, {});
             setUsers(response.data);
-            console.log(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -47,7 +46,7 @@ function DashboardUserList() {
                                         </div>
                                         <div className="col-md-12">
                                             <button className="btn btn-warning"
-                                                onClick={() => { navigate('/private-chat', { state: { id: id, name: name } }) }} >
+                                                onClick={() => { navigate('/private-chat', { state: { id: id, name: name, sendUserId: user.id } }) }} >
                                                 Send Msg
                                             </button>
                                         </div>
