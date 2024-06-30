@@ -7,13 +7,17 @@ function ChatsIndex() {
     const navigate = useNavigate();
     const location = useLocation();
     const { id, name } = location.state || {};
-    const loadChatsUrl = 'http://localhost:4242/api/members/search/:mess';
+    const loadChatsUrl = 'http://localhost:4242/api/members/list_of_channels';
 
     const loadChatsData = async (event) => {
         try {
-            const response = await axios.get(`${loadChatsUrl}`,{});
+            const response = await axios.post(`${loadChatsUrl}`,{
+                userId:id,
+            });
             console.log(response);
             console.log(response.data);
+            console.log(response.data.user);
+            console.log(response.data.user.channels);
         } catch (error) {
             console.log(error);
         }
