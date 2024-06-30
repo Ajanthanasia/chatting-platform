@@ -7,10 +7,30 @@ import ShowSuccessMessage from "../../routes/msg";
 function PrivateChat() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { id, name, sendUserId } = location.state || {};
+    const { id, name, sendUserId, sender } = location.state || {};
     const [privateMessage, setPrivateMessage] = useState("");
     const sendMsgUrl = 'http://localhost:4242/api/members/privatemessage';
     const [msg, setMsg] = useState("");
+    const loadChatHistoryUrl = 'http://localhost:4242/api/members/privatemessagehistories';
+    const [chats, setChats] = useState([{ msg: 'loading', toUserID: '0', userId: '0' }]);
+
+    const loadChatHistory = async (event) => {
+        try {
+            const response = await axios.post(`${loadChatHistoryUrl}`, {
+                userId: id,
+                toUserID: sendUserId,
+            });
+            console.log(response);
+            console.log(response.data);
+            console.log(response.data.messageHistory);
+            setChats(response.data.messageHistory);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    setTimeout(() => {
+        loadChatHistory();
+    }, 1000);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -41,14 +61,24 @@ function PrivateChat() {
                 <div className="col-sm-9">
                     <div className="row mb-1">
                         <div className="col-md-10">
-                            Private Chat
+                            Private Chat : {sender}
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-md-10">
-                            Loading Chats ...
+                    {chats.map((chat, index) => (
+                        <div className="row mb-1">
+                            {chat.userId === id ?
+                                <div className="col-md-6">
+                                    <div className="btn btn-success btn-sm form-control">
+                                        {chat.msg}
+                                    </div>
+                                </div>
+                                :
+                                <div className="col-md-6">
+                                    <div className="form-control">{chat.msg}</div>
+                                </div>
+                            }
                         </div>
-                    </div>
+                    ))}
                     <div className="row">
                         <div className="col-md-10">
                             <div className="form-group">

@@ -46,7 +46,7 @@ function DashboardUserList() {
                                         </div>
                                         <div className="col-md-12">
                                             <button className="btn btn-warning"
-                                                onClick={() => { navigate('/private-chat', { state: { id: id, name: name, sendUserId: user.id } }) }} >
+                                                onClick={() => { navigate('/private-chat', { state: { id: id, name: name, sendUserId: user.id,sender:user.username } }) }} >
                                                 Send Msg
                                             </button>
                                         </div>
