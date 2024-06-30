@@ -12,6 +12,26 @@ function ChannelChat() {
     const [channelMessageError, setChannelMessageError] = useState("");
     const sendChannelMsgUrl = 'http://localhost:4242/api/members/sendmessage';
     const [msg, setMsg] = useState("");
+    const loadChannelHistoryUrl = "http://localhost:4242/api/members/getChannelMessages";
+    const [chats, setChats] = useState([{ msg: 'loading...', userId: '0', username: 'none' }]);
+
+    const loadChatHistory = async (event) => {
+        try {
+            const response = await axios.post(`${loadChannelHistoryUrl}`, {
+                userId: id,
+                channelName: channelName,
+            });
+            console.log(response);
+            console.log(response.data);
+            console.log(response.data.messageHistory);
+            setChats(response.data.messageHistory);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    setTimeout(() => {
+        loadChatHistory();
+    }, 1000);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -45,11 +65,22 @@ function ChannelChat() {
                             <strong>{channelName}</strong>
                         </div>
                         <div className="col-md-10">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-control">Loading</div>
+                            {chats.map((chat, index) => (
+                                <div className="row mb-1" key={index}>
+                                    {chat.userId === id ?
+                                        <div className="col-md-6">
+                                            <div className="btn btn-success form-control">
+                                                {chat.msg}
+                                            </div>
+                                        </div>
+                                        :
+                                        <div className="col-md-6">
+                                            <div className="form-control">{chat.msg}</div>
+                                            <b>By {chat.username}</b>
+                                        </div>
+                                    }
                                 </div>
-                            </div>
+                            ))}
                         </div>
                         <div className="col-md-10">
                             <div className="form-group">

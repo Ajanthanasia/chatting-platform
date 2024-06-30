@@ -20,9 +20,6 @@ function PrivateChat() {
                 userId: id,
                 toUserID: sendUserId,
             });
-            console.log(response);
-            console.log(response.data);
-            console.log(response.data.messageHistory);
             setChats(response.data.messageHistory);
         } catch (error) {
             console.log(error);
@@ -65,7 +62,7 @@ function PrivateChat() {
                         </div>
                     </div>
                     {chats.map((chat, index) => (
-                        <div className="row mb-1">
+                        <div className="row mb-1" key={index}>
                             {chat.userId === id ?
                                 <div className="col-md-6">
                                     <div className="btn btn-success btn-sm form-control">
