@@ -25,9 +25,13 @@ function Login() {
                     username: username,
                     password: password,
                 });
-                console.log(response);
+                // console.log(response);
+                // console.log(response.data);
+                // console.log(response.data.username);
+                // console.log(response.data.userId);
+                const data = { id: response.data.userId, name: response.data.username };
                 console.log('Login successfully!');
-                navigate(successUrl);
+                navigate(successUrl, { state: data });
             } catch (error) {
                 console.log(error);
             }
@@ -90,13 +94,6 @@ function Login() {
                 </div>
             </form>
             <hr />
-            <div className="row">
-                <div className="col-md-6">
-                    <a href="signup">
-                        <button className="btn btn-info">Sign Up</button>
-                    </a>
-                </div>
-            </div>
         </div>
     );
 }

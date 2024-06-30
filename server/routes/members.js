@@ -289,6 +289,7 @@ router.post('/sendmessage', async (req, res) => {
 });
 
 
+
 // get all channel list
 router.get('/listChannels', (req, res) => {
   try {
@@ -360,45 +361,7 @@ router.post('/privatemessage', async (req, res) => {
 });
 
 
-// Send private message
-// router.post('/privatemessage', async (req, res) => {
-//   try {
-//     const { userId, toUserID, message } = req.body;
 
-//     if (!userId || !toUserID || !message) {
-//       return res.status(400).json({ error: 'userId, toUserID, and message are required' });
-//     }
-
-//     const sender = users[userId];
-//     const reciver=users[toUserID];
-//     if (!sender) {
-//       return res.status(404).json({ error: 'Sender not found' });
-//     }
-
-//     const private_msg_Id = `msg_${Date.now()}`;
-//     const lastMessage = Date.now();
-
-//     privateMesages[private_msg_Id] = {
-//       "msg": message,
-//       "toUserID": toUserID,
-//       "userId": userId,
-//       "lastseen": lastMessage
-//     };
-    
-//     res.status(200).json({
-//       "private_msg_Id": Object.keys(privateMesages).find(key => privateMesages[key].userId === userId),
-//       "msg": message,
-//       "toUserID": toUserID,
-//       "userId": userId,
-//       "lastseen": lastMessage
-//     });
-
-
-//   } catch (error) {
-//     console.error('Failed to send private message:', error);
-//     res.status(500).json({ error: 'Failed to send private message' });
-//   }
-// });
 
 // autocompletetion
 router.get('/search/:mess', async (req, res) => {
