@@ -201,7 +201,36 @@ router.post('/joinchannel', async (req, res) => {
   }
 });
 
+router.post('/list_of_channels', async (req, res) => {
+  try {
+    const { userId } = req.body;
 
+    if (!userId) {
+      return res.status(400).json({ error: 'userId is required' });
+    }
+
+    const member = users[userId];
+    if (!member) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const allChannels = Object.keys(channels).map(channelName => ({
+      channelName,
+      joined: member.channels.includes(channelName)
+    }));
+
+    res.status(200).json({ 
+      user: { 
+        userId, 
+        username: member.username, 
+        channels: allChannels 
+      }
+    });
+  } catch (error) {
+    console.error('Failed to retrieve channels:', error);
+    res.status(500).json({ error: 'Failed to retrieve channels' });
+  }
+});
 // Leave channel
 router.post('/leavechannel', async (req, res) => {
   try {
@@ -487,4 +516,5 @@ router.get('/search/:mess', async (req, res) => {
   res.status(200).json(results);
 
 });
+
 module.exports = router;
