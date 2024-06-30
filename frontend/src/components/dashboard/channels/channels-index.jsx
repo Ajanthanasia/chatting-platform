@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Dashboard from "../dashboard";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
+import ShowSuccessMessage from "../../routes/msg";
 
 function ChannelIndex() {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ function ChannelIndex() {
     const deleteChannelUrl = 'http://localhost:4242/api/members/deletechannel';
     const location = useLocation();
     const { id, name } = location.state || {};
+    const [msg, setMsg] = useState("");
 
     const loadChannelsData = async (event) => {
         try {
@@ -30,9 +32,7 @@ function ChannelIndex() {
                 ownerId: id,
                 channelName: event,
             });
-            console.log(response);
-            console.log(response.data);
-            console.log(response.data.message);
+            setMsg(response.data.message);
         } catch (error) {
             console.log(error);
         }
@@ -40,6 +40,7 @@ function ChannelIndex() {
     return (
         <div className="panel mt-1">
             <div className="row">
+                <ShowSuccessMessage msg={msg} />
                 <div className="col-sm-3">
                     <Dashboard id={id} name={name} />
                 </div>
@@ -68,7 +69,7 @@ function ChannelIndex() {
                                     {id === channel.creatorId ?
                                         <div className="row">
                                             <div className="col-md-3">
-                                                <button className="btn btn-primary">Edit</button>
+                                                <button className="btn btn-primary" onClick={() => { navigate('/channels-edit', { state: { id: id, name: name, editChannel: channel.channels, editChannelId: channel.id } }) }}>Edit</button>
                                                 <button className="btn btn-danger" onClick={() => deleteChannel(channel.channels)}>Delete</button>
                                             </div>
                                         </div>

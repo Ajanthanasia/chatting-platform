@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Dashboard from "../dashboard";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import ShowSuccessMessage from "../../routes/msg";
 
 function CreateChannel() {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ function CreateChannel() {
     const [channel, setChannel] = useState("");
     const url = 'http://localhost:4242/api/members/createchannel';
     const successUrl = '/channels-index';
+    const [msg, setMsg] = useState("");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -18,11 +20,11 @@ function CreateChannel() {
                 userId: id,
                 channelName: channel,
             });
-            // console.log(response);
-            // console.log(response.data);
-            console.log('Successfully updated');
+            setMsg(response.data.message);
             const data = { id: id, name: name };
-            navigate(successUrl, { state: data });
+            setTimeout(() => {
+                navigate(successUrl, { state: data });
+            }, 2000);
         } catch (error) {
             console.log(error);
         }
@@ -30,6 +32,7 @@ function CreateChannel() {
 
     return (
         <div className="panel mt-1">
+            <ShowSuccessMessage msg={msg} />
             <div className="row">
                 <div className="col-sm-3">
                     <Dashboard id={id} name={name} />

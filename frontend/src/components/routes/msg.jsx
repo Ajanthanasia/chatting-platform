@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
-function ShowMessage() {
+function ShowSuccessMessage(params) {
+    const [message, setMessage] = useState("");
+
+    setTimeout(() => {
+        setMessage(params.msg);
+    });
+
     return (
         <div className="row">
-            <div className="col-md-12">
-                ok
-            </div>
+            {message === '' ?
+                ''
+                : <div className="col-md-12">
+                    <button className="btn btn-info form-control">{message}</button>
+                </div>
+            }
         </div>
     );
 }
 
-export default ShowMessage;
+export default ShowSuccessMessage;
