@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Dashboard from "../dashboard";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function DashboardUserList() {
+    const navigate = useNavigate();
     const [users, setUsers] = useState([{ id: 1, username: 'no user', channels: '0' }]);
     const loadUrl = 'http://localhost:4242/api/members/users';
     const location = useLocation();
@@ -13,6 +14,7 @@ function DashboardUserList() {
         try {
             const response = await axios.get(`${loadUrl}`, {});
             setUsers(response.data);
+            console.log(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -36,8 +38,20 @@ function DashboardUserList() {
                         {users.map((user, index) => (
                             <div className="col-md-10" key={index}>
                                 <div className="form-control">
-                                    <strong>{user.username}</strong>
-                                    <p>Channels : {user.channels}</p>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <strong>{user.username}</strong>
+                                        </div>
+                                        <div className="col-md-12">
+                                            <p>Channels : {user.channels}</p>
+                                        </div>
+                                        <div className="col-md-12">
+                                            <button className="btn btn-warning"
+                                                onClick={() => { navigate('/private-chat', { state: { id: id, name: name } }) }} >
+                                                Send Msg
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ))}

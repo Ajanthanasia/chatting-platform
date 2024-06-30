@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Dashboard from "./dashboard";
 import axios from "axios";
+import ShowSuccessMessage from "../routes/msg";
 
 function Profile() {
     const [userId, setUserId] = useState("");
@@ -12,6 +13,7 @@ function Profile() {
     const url = 'http://localhost:4242/api/members/editUser';
     const navigate = useNavigate();
     const successUrl = '/profile';
+    const [msg, setMsg] = useState("");
 
     setTimeout(() => {
         setUserId(id);
@@ -25,9 +27,7 @@ function Profile() {
                 userId: userId,
                 newUsername: requsername,
             });
-            // console.log(response);
-            // console.log(response.data.username);
-            console.log('Successfully updated');
+            setMsg(response.data.message);
             const data = { id: response.data.userId, name: response.data.username };
             navigate(successUrl, { state: data });
         } catch (error) {
@@ -36,6 +36,7 @@ function Profile() {
     };
     return (
         <div className="panel mt-1">
+            <ShowSuccessMessage msg={msg} />
             <div className="row">
                 <div className="col-sm-3">
                     <Dashboard id={userId} name={username} />

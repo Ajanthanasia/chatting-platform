@@ -10,6 +10,8 @@ import ChannelIndex from "../dashboard/channels/channels-index";
 import CreateChannel from "../dashboard/channels/create";
 import ChatsIndex from "../dashboard/chats/chats-index";
 import EditChannel from "../dashboard/channels/edit";
+import PrivateChat from "../dashboard/chats/private-chat";
+import ChannelChat from "../dashboard/chats/channel-chat";
 
 function Routing() {
     return (
@@ -25,6 +27,8 @@ function Routing() {
                 <Route path="channels-create" element={<CreateChannel />}></Route>
                 <Route path="chats-index" element={<ChatsIndex />}></Route>
                 <Route path="channels-edit" element={<EditChannel />}></Route>
+                <Route path="private-chat" element={<PrivateChat />}></Route>
+                <Route path="channels-chat" element={<ChannelChat />}></Route>
             </Routes>
         </BrowserRouter>
     );

@@ -69,8 +69,21 @@ function ChannelIndex() {
                                     {id === channel.creatorId ?
                                         <div className="row">
                                             <div className="col-md-3">
-                                                <button className="btn btn-primary" onClick={() => { navigate('/channels-edit', { state: { id: id, name: name, editChannel: channel.channels, editChannelId: channel.id } }) }}>Edit</button>
-                                                <button className="btn btn-danger" onClick={() => deleteChannel(channel.channels)}>Delete</button>
+                                                <button className="btn btn-primary"
+                                                    onClick={() => { navigate('/channels-edit', { state: { id: id, name: name, editChannel: channel.channels, editChannelId: channel.id } }) }}>
+                                                    Edit
+                                                </button>
+                                            </div>
+                                            <div className="col-md-3">
+                                                <button className="btn btn-danger" onClick={() => deleteChannel(channel.channels)}>
+                                                    Delete
+                                                </button>
+                                            </div>
+                                            <div className="col-md-3">
+                                                <button className="btn btn-warning"
+                                                    onClick={() => { navigate('/channels-chat', { state: { id: id, name: name, channelName: channel.channels, channelId: channel.id } }) }}>
+                                                    msg
+                                                </button>
                                             </div>
                                         </div>
                                         : ''}
