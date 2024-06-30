@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 
-const users = {}; 
+const users = {};
 const channels = {};
-const privateMesages={};
-const GroupMessages={};
+const privateMesages = {};
+const GroupMessages = {};
 
 // Register user
 router.post('/register', async (req, res) => {
-  res.status(201).json({ message: 'User register unavailable'});
+  res.status(201).json({ message: 'User register unavailable' });
   // try {
   //   const { username, email, password } = req.body;
   //   const hashedPassword = await bcrypt.hash(password, 10);
@@ -51,20 +51,21 @@ router.post('/login', async (req, res) => {
 
 // Edit User Information
 router.put('/editUser', (req, res) => {
-  const { userId, newUsername} = req.body;
+  const { userId, newUsername } = req.body;
   try {
     if (!userId) {
       return res.status(400).json({ error: 'userId is required' });
     }
-    if (!users[userId]){
+    if (!users[userId]) {
       return res.status(404).json({ error: 'User not found' });
-    } 
+    }
 
     users[userId].username = newUsername || users[userId].username;
 
-    res.status(200).json({ message: 'User information updated successfully' ,
-      "userId":userId,
-      "username":newUsername
+    res.status(200).json({
+      message: 'User information updated successfully',
+      "userId": userId,
+      "username": newUsername
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to update user information' });
@@ -123,10 +124,9 @@ router.post('/createchannel', async (req, res) => {
 });
 
 // Delete channel
-router.delete('/deletechannel', async (req, res) => {
+router.post('/deletechannel', async (req, res) => {
   try {
     const { ownerId, channelName } = req.body;
-
     if (!ownerId || !channelName) {
       return res.status(400).json({ error: 'ownerId and channelName are required' });
     }
@@ -150,22 +150,23 @@ router.delete('/deletechannel', async (req, res) => {
 });
 // edit the channel
 router.put('/editChannel', (req, res) => {
-  const { userId, newChannel,channelId} = req.body;
+  const { userId, newChannel, channelId } = req.body;
   try {
-    if(channels[channelId].ownerId==userId){
+    if (channels[channelId].ownerId == userId) {
       channels[channelId].channel = newChannel || channels[channelId].channel;
 
-      res.status(200).json({ message: 'channel information updated successfully' ,
+      res.status(200).json({
+        message: 'channel information updated successfully',
         "ownerId": userId,
-        "channelName":newChannel,
+        "channelName": newChannel,
       });
-      
+
     }
   }
-    catch (error) {
-      res.status(500).json({ error: 'Failed to update channel information' });
-    }
-    
+  catch (error) {
+    res.status(500).json({ error: 'Failed to update channel information' });
+  }
+
 });
 
 // Join channel
@@ -250,27 +251,43 @@ router.post('/sendmessage', async (req, res) => {
     const channelId = Object.keys(channels).find(
       key => channels[key].channelName === channelName
     );
-    const group_msg_Id = `msg_${Date.now()}`;
+    
+    if (!channelId) {
+      return res.status(404).json({ error: 'Channel not found' });
+    }
+
+    const groupMsgId = `msg_${Date.now()}`;
     const lastMessage = Date.now();
-    GroupMessages[group_msg_Id] = {
-      "msg":message,
-      "channelId":channelId,
-      "username":member.username,
-      "userId":userId,
-      "lastseen":lastMessage
+
+    const messageDetails = {
+      msg: message,
+      channelId: channelId,
+      username: member.username,
+      userId: userId,
+      lastseen: lastMessage
     };
-    res.status(200).json({ message: `${member.username}: ${message}` ,
-        "msg":message,
-        "group_msg_Id":Object.keys(GroupMessages).find(key => GroupMessages[key].userId === userId),
-        "username":member.username,
-        "userId":userId,
-        "lastseen":lastMessage
-      });
+
+    if (!GroupMessages[channelId]) {
+      GroupMessages[channelId] = [];
+    }
+
+    GroupMessages[channelId].push(messageDetails);
+
+    res.status(200).json({
+      message: `${member.username}: ${message}`,
+      msg: message,
+      group_msg_Id: groupMsgId,
+      username: member.username,
+      userId: userId,
+      lastseen: lastMessage,
+      messageHistory: GroupMessages[channelId]
+    });
   } catch (error) {
     console.error('Failed to send message:', error);
     res.status(500).json({ error: 'Failed to send message' });
   }
 });
+
 
 // get all channel list
 router.get('/listChannels', (req, res) => {
@@ -278,7 +295,8 @@ router.get('/listChannels', (req, res) => {
     const channelList = Object.keys(channels).map(channelId => ({
       id: channelId,
       channels: channels[channelId].channelName,
-      ownerName:users[channels[channelId].ownerId].userId
+      creatorId: channels[channelId].ownerId,
+      ownerName: users[channels[channelId].ownerId].userId
     }));
     res.status(200).json(channelList);
   } catch (error) {
@@ -286,7 +304,6 @@ router.get('/listChannels', (req, res) => {
   }
 });
 
-// Send private message
 router.post('/privatemessage', async (req, res) => {
   try {
     const { userId, toUserID, message } = req.body;
@@ -296,36 +313,96 @@ router.post('/privatemessage', async (req, res) => {
     }
 
     const sender = users[userId];
+    const receiver = users[toUserID];
     if (!sender) {
       return res.status(404).json({ error: 'Sender not found' });
     }
+    if (!receiver) {
+      return res.status(404).json({ error: 'Receiver not found' });
+    }
 
-    const private_msg_Id = `msg_${Date.now()}`;
+    const privateMsgId = `msg_${Date.now()}`;
     const lastMessage = Date.now();
-    privateMesages[private_msg_Id] = {
-      "msg":message,
-      "toUserID":toUserID,
-      "userId":userId,
-      "lastseen":lastMessage
+
+    const messageDetails = {
+      msg: message,
+      toUserID: toUserID,
+      userId: userId,
+      lastseen: lastMessage
     };
-    res.status(200).json({ 
-        "private_msg_Id":Object.keys(privateMesages).find(key => privateMesages[key].userId === userId),
-        "msg":message,
-      "toUserID":toUserID,
-      "userId":userId,
-      "lastseen":lastMessage
-      });
-    
-  
+
+    const userPairKey = `${userId}_${toUserID}`;
+    const reverseUserPairKey = `${toUserID}_${userId}`;
+
+    if (!privateMesages[userPairKey] && !privateMesages[reverseUserPairKey]) {
+      privateMesages[userPairKey] = [];
+    }
+
+    if (privateMesages[userPairKey]) {
+      privateMesages[userPairKey].push(messageDetails);
+    } else if (privateMesages[reverseUserPairKey]) {
+      privateMesages[reverseUserPairKey].push(messageDetails);
+    }
+
+    res.status(200).json({
+      private_msg_Id: privateMsgId,
+      msg: message,
+      toUserID: toUserID,
+      userId: userId,
+      lastseen: lastMessage,
+      messageHistory: privateMesages[userPairKey] || privateMesages[reverseUserPairKey]
+    });
+
   } catch (error) {
     console.error('Failed to send private message:', error);
     res.status(500).json({ error: 'Failed to send private message' });
   }
 });
 
+
+// Send private message
+// router.post('/privatemessage', async (req, res) => {
+//   try {
+//     const { userId, toUserID, message } = req.body;
+
+//     if (!userId || !toUserID || !message) {
+//       return res.status(400).json({ error: 'userId, toUserID, and message are required' });
+//     }
+
+//     const sender = users[userId];
+//     const reciver=users[toUserID];
+//     if (!sender) {
+//       return res.status(404).json({ error: 'Sender not found' });
+//     }
+
+//     const private_msg_Id = `msg_${Date.now()}`;
+//     const lastMessage = Date.now();
+
+//     privateMesages[private_msg_Id] = {
+//       "msg": message,
+//       "toUserID": toUserID,
+//       "userId": userId,
+//       "lastseen": lastMessage
+//     };
+    
+//     res.status(200).json({
+//       "private_msg_Id": Object.keys(privateMesages).find(key => privateMesages[key].userId === userId),
+//       "msg": message,
+//       "toUserID": toUserID,
+//       "userId": userId,
+//       "lastseen": lastMessage
+//     });
+
+
+//   } catch (error) {
+//     console.error('Failed to send private message:', error);
+//     res.status(500).json({ error: 'Failed to send private message' });
+//   }
+// });
+
 // autocompletetion
-router.get('/search/:mess',async(req,res) => {
-  const mess=req.params.mess.toLowerCase();
+router.get('/search/:mess', async (req, res) => {
+  const mess = req.params.mess.toLowerCase();
   const results = {
     users: [],
     channels: [],
@@ -375,6 +452,6 @@ router.get('/search/:mess',async(req,res) => {
   }
 
   res.status(200).json(results);
-  
+
 });
 module.exports = router;
