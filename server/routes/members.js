@@ -288,6 +288,41 @@ router.post('/sendmessage', async (req, res) => {
   }
 });
 
+router.post('/getChannelMessages', async (req, res) => {
+  try {
+    const { userId, channelName } = req.body;
+
+    if (!userId || !channelName) {
+      return res.status(400).json({ error: 'userId and channelName are required' });
+    }
+
+    const member = users[userId];
+    if (!member) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const channelId = Object.keys(channels).find(
+      key => channels[key].channelName === channelName
+    );
+    
+    if (!channelId) {
+      return res.status(404).json({ error: 'Channel not found' });
+    }
+
+    const messageHistory = GroupMessages[channelId] || [];
+
+    res.status(200).json({
+      channelId: channelId,
+      channelName: channelName,
+      messageHistory: messageHistory
+    });
+
+  } catch (error) {
+    console.error('Failed to retrieve channel messages:', error);
+    res.status(500).json({ error: 'Failed to retrieve channel messages' });
+  }
+});
+
 
 
 // get all channel list
@@ -357,6 +392,41 @@ router.post('/privatemessage', async (req, res) => {
   } catch (error) {
     console.error('Failed to send private message:', error);
     res.status(500).json({ error: 'Failed to send private message' });
+  }
+});
+
+
+router.post('/privatemessagehistories', async (req, res) => {
+  try {
+    const { userId, toUserID } = req.body;
+
+    if (!userId || !toUserID) {
+      return res.status(400).json({ error: 'userId and toUserID are required' });
+    }
+
+    const sender = users[userId];
+    const receiver = users[toUserID];
+    if (!sender) {
+      return res.status(404).json({ error: 'Sender not found' });
+    }
+    if (!receiver) {
+      return res.status(404).json({ error: 'Receiver not found' });
+    }
+
+    const userPairKey = `${userId}_${toUserID}`;
+    const reverseUserPairKey = `${toUserID}_${userId}`;
+
+    const messageHistory = privateMesages[userPairKey] || privateMesages[reverseUserPairKey] || [];
+
+    res.status(200).json({
+      userId: userId,
+      toUserID: toUserID,
+      messageHistory: messageHistory
+    });
+
+  } catch (error) {
+    console.error('Failed to retrieve private message history:', error);
+    res.status(500).json({ error: 'Failed to retrieve private message history' });
   }
 });
 
