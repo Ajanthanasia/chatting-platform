@@ -12,12 +12,13 @@ function ChannelIndex() {
     const location = useLocation();
     const { id, name } = location.state || {};
     const [msg, setMsg] = useState("");
+    const joinChannelUrl = "http://localhost:4242/api/members/joinchannel";
+    const leaveChanelUrl = "http://localhost:4242/api/members/leavechannel";
 
     const loadChannelsData = async (event) => {
         try {
             const response = await axios.get(`${loadUrl}`, {});
             setChannels(response.data);
-            // console.log(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -37,6 +38,35 @@ function ChannelIndex() {
             console.log(error);
         }
     }
+
+    const joinChannel = async (event) => {
+        console.log(event);
+        try {
+            const response = await axios.post(`${joinChannelUrl}`, {
+                userId: id,
+                channelName: event,
+            });
+            setMsg(response.data.message);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const leaveChannel = async (event) => {
+        console.log(event);
+        try {
+            const response = await axios.post(`${leaveChanelUrl}`, {
+                userId: id,
+                channelName: event,
+            });
+            setMsg(response.data.message);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className="panel mt-1">
             <div className="row">
@@ -86,7 +116,22 @@ function ChannelIndex() {
                                                 </button>
                                             </div>
                                         </div>
-                                        : ''}
+                                        :
+                                        <div className="row">
+                                            <div className="col-md-3">
+                                                <button className="btn btn-success"
+                                                    onClick={() => joinChannel(channel.channels)}>
+                                                    Join
+                                                </button>
+                                            </div>
+                                            <div className="col-md-3">
+                                                <button className="btn btn-danger"
+                                                    onClick={() => leaveChannel(channel.channels)}>
+                                                    Leave
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         ))}
